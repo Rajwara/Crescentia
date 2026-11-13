@@ -1,0 +1,128 @@
+{
+  "gradient-hero": {
+    "width": 1440,
+    "height": 1624,
+    "widths": [
+      500,
+      800,
+      1080,
+      1440
+    ]
+  },
+  "gradient-product": {
+    "width": 1440,
+    "height": 1448,
+    "widths": [
+      500,
+      800,
+      1080,
+      1440
+    ]
+  },
+  "gradient-order": {
+    "width": 1440,
+    "height": 1330,
+    "widths": [
+      500,
+      800,
+      1080,
+      1440
+    ]
+  },
+  "gradient-404": {
+    "width": 1355,
+    "height": 1355,
+    "widths": [
+      500,
+      800,
+      1080,
+      1355
+    ]
+  },
+  "hero-croissant": {
+    "width": 842,
+    "height": 850,
+    "widths": [
+      500,
+      800,
+      842
+    ]
+  },
+  "twice-baked-almond-croissant": {
+    "width": 700,
+    "height": 700,
+    "widths": [
+      500,
+      700
+    ]
+  },
+  "sea-salt-caramel-brioche": {
+    "width": 1200,
+    "height": 1200,
+    "widths": [
+      500,
+      800,
+      1080,
+      1200
+    ]
+  },
+  "miso-butter-scone": {
+    "width": 1200,
+    "height": 1200,
+    "widths": [
+      500,
+      800,
+      1080,
+      1200
+    ]
+  },
+  "heritage-sourdough": {
+    "width": 1200,
+    "height": 1200,
+    "widths": [
+      500,
+      800,
+      1080,
+      1200
+    ]
+  },
+  "order-sourdough-loaf": {
+    "width": 650,
+    "height": 650,
+    "widths": [
+      500,
+      650
+    ]
+  },
+  "testimonial-customer-1": {
+    "width": 1440,
+    "height": 1024,
+    "widths": [
+      500,
+      800,
+      1080,
+      1440
+    ]
+  },
+  "testimonial-customer-2": {
+    "width": 1281,
+    "height": 906,
+    "widths": [
+      500,
+      800,
+      1080,
+      1281
+    ]
+  },
+  "testimonial-customer-3": {
+    "width": 1281,
+    "height": 906,
+    "widths": [
+      500,
+      800,
+      1080,
+      1281
+    ]
+  },
+  "_fonts": 126
+}
