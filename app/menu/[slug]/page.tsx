@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
+import AddToCart from "@/components/cart/AddToCart";
 import { ButtonArrow } from "@/components/Icons";
 import MenuCollection from "@/components/MenuCollection";
 import Navbar from "@/components/Navbar";
@@ -65,6 +66,12 @@ export default async function ProductPage({ params }: Props) {
                 sizes="(max-width: 767px) 100vw, (max-width: 991px) 727px, 940px"
                 className="single-image"
               />
+            </div>
+            <div className="single-add">
+              <AddToCart id={p.slug} label="Add to cart" size="lg" />
+              <a href={`/order-online?item=${p.slug}`} className="read-more">
+                Order now →
+              </a>
             </div>
             <div className="single-flex-2">
               <div className="single-value w-richtext">

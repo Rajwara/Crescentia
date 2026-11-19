@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
+import AddToCart from "@/components/cart/AddToCart";
 import { ARROW, img } from "@/lib/images";
 import { products } from "@/lib/products";
 import { site } from "@/lib/site";
@@ -15,7 +16,7 @@ export default function CollectionPage() {
       current="/collection"
       eyebrow="Baked Fresh Every Morning"
       title="The Signature Collection"
-      lead="Small-batch bakes made with heritage flours, cultured butter and plenty of time."
+      lead={<>Small-batch bakes made with heritage flours, cultured butter and plenty of time. See the <a href="/menu">full menu</a> for breakfast to dinner.</>}
     >
       <div className="product-grid">
         {products.map((p) => (
@@ -35,9 +36,7 @@ export default function CollectionPage() {
               <a href={`/menu/${p.slug}`} className="read-more">
                 Details <img src={ARROW} alt="" />
               </a>
-              <a href={`/order-online?item=${p.slug}`} className="read-more">
-                Order <img src={ARROW} alt="" />
-              </a>
+              <AddToCart id={p.slug} label="Add to cart" />
             </div>
           </div>
         ))}

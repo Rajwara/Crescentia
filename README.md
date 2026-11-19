@@ -16,6 +16,7 @@ npm run build      # production build
 | --- | --- |
 | Phone, email, address, opening hours, social links, footer links | `lib/site.ts` |
 | Products (name, price, description, nutrition) | `lib/products.ts` |
+| Full menu (Breakfast / Brunch / Lunch / Dinner dishes, prices, tags) | `lib/menu.ts` |
 | Blog posts | `lib/blog.ts` (add an object to publish a new post) |
 | Colour palettes for the floating colour button | `lib/themes.ts` |
 | Main menu + footer page links | `nav` in `lib/site.ts` |

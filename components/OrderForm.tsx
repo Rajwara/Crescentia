@@ -1,32 +1,38 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { img } from "@/lib/images";
+import { getItem } from "@/lib/menu";
 import { products } from "@/lib/products";
-import { site } from "@/lib/site";
+import { phoneHref, site } from "@/lib/site";
+import { useCart } from "./cart/CartProvider";
+import AddToCart from "./cart/AddToCart";
 import { ButtonArrow } from "./Icons";
 
 type Mode = "order" | "preorder";
 
 const TIME_SLOTS = ["10:00 AM – 12:00 PM", "12:00 PM – 2:00 PM", "2:00 PM – 5:00 PM"];
-const priceOf = (p: string) => Number(p.replace(/[^\d.]/g, "")) || 0;
 const isoDate = (d: Date) => d.toISOString().slice(0, 10);
 
 /**
- * Order / pre-order form. Until an online shop or payment service is connected, it sends the order
- * to the bakery by opening the customer's email app with every detail filled in.
- * A product can be preselected with ?item=<product-slug>.
+ * Checkout for the cart (Order Online = today, Pre-Order = a later date). Until an online shop or
+ * payment service is connected, it sends the order to the bakery by opening the customer's email app
+ * with every detail filled in. ?item=<id> adds that item to the cart first.
  */
 export default function OrderForm({ mode }: { mode: Mode }) {
-  const [qty, setQty] = useState<Record<string, number>>({});
+  const { lines, total, ensure, clear } = useCart();
   const [method, setMethod] = useState<"Pickup" | "Delivery">("Pickup");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const handledItem = useRef(false);
 
   useEffect(() => {
-    const item = new URLSearchParams(window.location.search).get("item");
-    if (item && products.some((p) => p.slug === item)) setQty({ [item]: 1 });
-  }, []);
+    if (handledItem.current) return;
+    handledItem.current = true;
+    const id = new URLSearchParams(window.location.search).get("item");
+    // Wait a tick so the saved cart has loaded first.
+    if (id && getItem(id)) setTimeout(() => ensure(id), 0);
+  }, [ensure]);
 
   const tomorrow = useMemo(() => {
     const d = new Date();
@@ -34,15 +40,12 @@ export default function OrderForm({ mode }: { mode: Mode }) {
     return isoDate(d);
   }, []);
 
-  const lines = products.filter((p) => (qty[p.slug] ?? 0) > 0);
-  const total = lines.reduce((sum, p) => sum + priceOf(p.price) * qty[p.slug], 0);
-  const change = (slug: string, d: number) =>
-    setQty((q) => ({ ...q, [slug]: Math.min(50, Math.max(0, (q[slug] ?? 0) + d)) }));
+  const suggestions = products.filter((p) => !lines.some((l) => l.item.id === p.slug));
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!lines.length) {
-      setError("Please add at least one item.");
+      setError("Your cart is empty — add at least one item.");
       return;
     }
     setError("");
@@ -51,7 +54,7 @@ export default function OrderForm({ mode }: { mode: Mode }) {
     const body = [
       `${title} — ${site.name}`,
       "",
-      ...lines.map((p) => `• ${qty[p.slug]} × ${p.name} (${p.price} each)`),
+      ...lines.map((l) => `• ${l.qty} × ${l.item.name} (AED ${l.item.price} each)`),
       `Estimated total: AED ${total}`,
       "",
       `${method}: ${mode === "order" ? "Today" : f.get("date")}, ${f.get("slot")}`,
@@ -67,6 +70,7 @@ export default function OrderForm({ mode }: { mode: Mode }) {
     const subject = `${title} from ${f.get("name")}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSent(true);
+    clear();
   }
 
   if (sent) {
@@ -79,7 +83,7 @@ export default function OrderForm({ mode }: { mode: Mode }) {
         </p>
         <p>
           Nothing happened? Email us at <a href={`mailto:${site.email}`}>{site.email}</a> or call{" "}
-          <a href={`tel:${site.phone.replace(/[^+\d]/g, "")}`}>{site.phone}</a>.
+          <a href={phoneHref}>{site.phone}</a>.
         </p>
       </div>
     );
@@ -88,39 +92,57 @@ export default function OrderForm({ mode }: { mode: Mode }) {
   return (
     <form className="order-layout" onSubmit={onSubmit}>
       <div className="order-step">
-        <div className="page-eyebrow">1 · Choose your bakes</div>
-        <div className="order-products">
-          {products.map((p) => {
-            const n = qty[p.slug] ?? 0;
-            return (
-              <div key={p.slug} className={`order-product${n ? " is-selected" : ""}`}>
-                <img {...img(p.image)} sizes="88px" alt="" loading="lazy" />
+        <div className="page-eyebrow">1 · Your order</div>
+        {lines.length === 0 ? (
+          <div className="order-empty">
+            <p>Your cart is empty.</p>
+            <a href="/menu" className="read-more">
+              Browse the full menu →
+            </a>
+          </div>
+        ) : (
+          <div className="order-products">
+            {lines.map(({ item, qty }) => (
+              <div key={item.id} className="order-product is-selected">
+                {item.image ? (
+                  <img {...img(item.image)} sizes="88px" alt="" loading="lazy" />
+                ) : (
+                  <span className="order-product-mono">{item.name[0]}</span>
+                )}
                 <div className="order-product-info">
-                  <a href={`/menu/${p.slug}`} className="order-product-name">
-                    {p.name}
-                  </a>
+                  <div className="order-product-name">{item.name}</div>
                   <div className="page-meta">
-                    {p.price} · {p.weight}
+                    AED {item.price} × {qty} = AED {item.price * qty}
                   </div>
                 </div>
-                <div className="qty" aria-label={`Quantity of ${p.name}`}>
-                  <button type="button" onClick={() => change(p.slug, -1)} aria-label="Remove one" disabled={!n}>
-                    −
-                  </button>
-                  <span>{n}</span>
-                  <button type="button" onClick={() => change(p.slug, 1)} aria-label="Add one">
-                    +
-                  </button>
-                </div>
+                <AddToCart id={item.id} />
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
         <div className="order-total">
           <span className="page-eyebrow">Estimated total</span>
           <span className="order-total-value">AED {total}</span>
         </div>
         {error && <div className="order-error">{error}</div>}
+
+        {suggestions.length > 0 && (
+          <div className="order-suggest">
+            <div className="page-eyebrow">Add a signature bake</div>
+            {suggestions.map((p) => (
+              <div key={p.slug} className="order-suggest-row">
+                <img {...img(p.image)} sizes="48px" alt="" loading="lazy" />
+                <span>
+                  {p.name} <span className="page-meta">· {p.price}</span>
+                </span>
+                <AddToCart id={p.slug} />
+              </div>
+            ))}
+            <a href="/menu" className="read-more">
+              See the full menu →
+            </a>
+          </div>
+        )}
       </div>
 
       <div className="order-step">

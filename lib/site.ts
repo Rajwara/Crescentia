@@ -33,6 +33,7 @@ export const site = {
   /** Main menu (shown in capitals by the template CSS). Also used for the footer "Pages" column. */
   nav: [
     { label: "Our Story", href: "/our-story" },
+    { label: "Menu", href: "/menu" },
     { label: "Collection", href: "/collection" },
     { label: "Reviews", href: "/reviews" },
     { label: "Order Online", href: "/order-online" },
