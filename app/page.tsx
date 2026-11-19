@@ -23,10 +23,10 @@ const slideIds = [
 ];
 
 const HOME_NAV = [
-  { label: "ABOUT", href: "#About" },
+  { label: "OUR STORY", href: "#About" },
   { label: "COLLECTION", href: "#Menu" },
   { label: "REVIEWS", href: "#Testimonial" },
-  { label: "ORDER", href: "#Order" },
+  { label: "ORDER ONLINE", href: "#Order" },
   { label: "BLOG", href: "/blog" },
   { label: "CONTACT", href: "/contact" },
 ];
@@ -57,7 +57,7 @@ export default function HomePage() {
                       href={l.href}
                       className={`navbar-link${i === 0 ? " first" : ""}${i === HOME_NAV.length - 1 ? " last" : ""}`}
                     >
-                      ({l.label})
+                      {l.label}
                     </a>
                   ))}
                 </div>

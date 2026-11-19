@@ -1,7 +1,7 @@
 /** Navigation used on every page except the home hero. */
 const LINKS = [
   { label: "HOME", href: "/" },
-  { label: "ABOUT", href: "/about" },
+  { label: "OUR STORY", href: "/about" },
   { label: "COLLECTION", href: "/#Menu" },
   { label: "BLOG", href: "/blog" },
   { label: "CONTACT", href: "/contact" },
@@ -26,7 +26,7 @@ export default function Navbar({ current }: { current?: string }) {
                   current === l.href ? " is-current" : ""
                 }`}
               >
-                ({l.label})
+                {l.label}
               </a>
             ))}
           </div>
