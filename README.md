@@ -50,6 +50,8 @@ delete `<ThemeSwitcher />` from `app/layout.tsx`.
 
 ## Deploy on Vercel
 
+Live site: https://crescentia-hazel.vercel.app — production deploys from the `main` branch.
+
 1. Go to https://vercel.com/new and import the `Rajwara/Crescentia` GitHub repository.
 2. Framework preset: **Next.js** (auto-detected). No settings or environment variables are required.
 3. Optional: set `NEXT_PUBLIC_SITE_URL` to your final domain (e.g. `https://crescentia.ae`) for correct
