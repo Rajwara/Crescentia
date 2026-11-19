@@ -29,7 +29,7 @@ export default function MenuCollection({ current, sizes }: { current?: string; s
             </div>
           </div>
         </section>
-        <a href="/contact" className="menu-flex-1 menu-reserve-link">
+        <a href="/pre-order" className="menu-flex-1 menu-reserve-link">
           <div>RESERVE LIMITED BATCH</div>
           <img src={ARROW} loading="lazy" alt="" className="menu-icon" />
         </a>

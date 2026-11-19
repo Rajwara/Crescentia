@@ -4,6 +4,7 @@ import MenuCollection from "@/components/MenuCollection";
 import NewsletterForm from "@/components/NewsletterForm";
 import WebflowRuntime from "@/components/WebflowRuntime";
 import { img } from "@/lib/images";
+import { reviews as testimonials } from "@/lib/reviews";
 import { site } from "@/lib/site";
 
 const heroImageStyle: React.CSSProperties = {
@@ -11,24 +12,10 @@ const heroImageStyle: React.CSSProperties = {
   opacity: 0,
 };
 
-const testimonials = [
-  { quote: "“One of the most beautifully branded bakeries in the city.”", name: "Dubai Food Edit" },
-  { quote: "“Perfect texture, perfect balance — it’s not just bread, it’s art.”", name: "Eat This Daily" },
-  { quote: "“The sourdough alone is worth the trip across town.”", name: "Indie Table" },
-];
 const slideIds = [
   "20900d37-e558-63d2-3d4d-7ed181a45a71",
   "20900d37-e558-63d2-3d4d-7ed181a45a72",
   "8f42e3b0-be11-f787-8fdc-4de970dca21d",
-];
-
-const HOME_NAV = [
-  { label: "OUR STORY", href: "#About" },
-  { label: "COLLECTION", href: "#Menu" },
-  { label: "REVIEWS", href: "#Testimonial" },
-  { label: "ORDER ONLINE", href: "#Order" },
-  { label: "BLOG", href: "/blog" },
-  { label: "CONTACT", href: "/contact" },
 ];
 
 export default function HomePage() {
@@ -51,11 +38,11 @@ export default function HomePage() {
                   <div className="navbar-menu-line _2" />
                 </div>
                 <div className="navbar-menu-block">
-                  {HOME_NAV.map((l, i) => (
+                  {site.nav.map((l, i) => (
                     <a
                       key={l.href}
                       href={l.href}
-                      className={`navbar-link${i === 0 ? " first" : ""}${i === HOME_NAV.length - 1 ? " last" : ""}`}
+                      className={`navbar-link${i === 0 ? " first" : ""}${i === site.nav.length - 1 ? " last" : ""}`}
                     >
                       {l.label}
                     </a>
@@ -242,7 +229,7 @@ export default function HomePage() {
                 <div className="order-text-2 _2nd">{site.deliveryArea}</div>
               </div>
             </div>
-            <a data-w-id="5072c870-af3f-b45a-113e-98e1a48e125c" href="#Pickup" className="primary-button order w-inline-block">
+            <a data-w-id="5072c870-af3f-b45a-113e-98e1a48e125c" href="/pre-order" className="primary-button order w-inline-block">
               <div className="text-block-3">SCHEDULE MY PICKUP</div>
               <ButtonArrow variant="order" />
             </a>

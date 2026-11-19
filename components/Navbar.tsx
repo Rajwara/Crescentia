@@ -1,11 +1,7 @@
+import { site } from "@/lib/site";
+
 /** Navigation used on every page except the home hero. */
-const LINKS = [
-  { label: "HOME", href: "/" },
-  { label: "OUR STORY", href: "/about" },
-  { label: "COLLECTION", href: "/#Menu" },
-  { label: "BLOG", href: "/blog" },
-  { label: "CONTACT", href: "/contact" },
-];
+const LINKS = [{ label: "Home", href: "/" }, ...site.nav];
 
 export default function Navbar({ current }: { current?: string }) {
   return (

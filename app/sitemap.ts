@@ -4,7 +4,7 @@ import { products } from "@/lib/products";
 import { site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["", "/about", "/contact", "/blog", "/terms", "/privacy"];
+  const pages = ["", "/our-story", "/collection", "/reviews", "/order-online", "/pre-order", "/contact", "/blog", "/terms", "/privacy"];
   return [
     ...pages.map((p) => ({ url: `${site.url}${p}` })),
     ...products.map((p) => ({ url: `${site.url}/menu/${p.slug}` })),

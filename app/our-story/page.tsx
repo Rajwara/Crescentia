@@ -27,7 +27,7 @@ const values = [
 export default function AboutPage() {
   return (
     <PageShell
-      current="/about"
+      current="/our-story"
       eyebrow="Our Story"
       title={`About ${site.name}`}
       lead="A modern bakery in the heart of Dubai, rooted in the old-world craft of natural leavening."
@@ -65,7 +65,7 @@ export default function AboutPage() {
       </div>
 
       <div className="page-cta">
-        <a href="/#Menu" className="primary-button single w-inline-block">
+        <a href="/collection" className="primary-button single w-inline-block">
           <div>BROWSE THE COLLECTION</div>
           <ButtonArrow variant="single" />
         </a>

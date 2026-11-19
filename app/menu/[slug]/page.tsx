@@ -44,7 +44,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <Navbar current="/#Menu" />
+      <Navbar current="/collection" />
       <section className="single-section">
         <div className="w-layout-blockcontainer single-container w-container">
           <div className="single-block">
@@ -107,8 +107,8 @@ export default async function ProductPage({ params }: Props) {
             <div className="single-value w-richtext">
               <p>{p.outro}</p>
             </div>
-            <a data-w-id="80a444fb-48ca-0063-4338-25d405588319" href="/contact" className="primary-button single w-inline-block">
-              <div>CHAT TO ORDER</div>
+            <a data-w-id="80a444fb-48ca-0063-4338-25d405588319" href={`/order-online?item=${p.slug}`} className="primary-button single w-inline-block">
+              <div>ORDER THIS</div>
               <ButtonArrow variant="single" />
             </a>
           </div>

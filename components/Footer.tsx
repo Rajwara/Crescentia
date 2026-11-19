@@ -57,7 +57,7 @@ export default function Footer() {
               <div className="footer-link-columns">
                 <div className="footer-flex-4">
                   <div className="footer-text-2">PAGES</div>
-                  {site.footerPages.map((l) => (
+                  {site.nav.map((l) => (
                     <a key={l.href} href={l.href} className="footer-text-3">
                       {l.label}
                     </a>

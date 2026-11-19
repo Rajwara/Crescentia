@@ -30,8 +30,13 @@ export const site = {
     { label: "TIKTOK", href: "https://www.tiktok.com/" },
   ],
 
-  footerPages: [
-    { label: "About Us", href: "/about" },
+  /** Main menu (shown in capitals by the template CSS). Also used for the footer "Pages" column. */
+  nav: [
+    { label: "Our Story", href: "/our-story" },
+    { label: "Collection", href: "/collection" },
+    { label: "Reviews", href: "/reviews" },
+    { label: "Order Online", href: "/order-online" },
+    { label: "Pre-Order", href: "/pre-order" },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
   ],

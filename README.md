@@ -18,7 +18,9 @@ npm run build      # production build
 | Products (name, price, description, nutrition) | `lib/products.ts` |
 | Blog posts | `lib/blog.ts` (add an object to publish a new post) |
 | Colour palettes for the floating colour button | `lib/themes.ts` |
-| About / Contact / Terms / Privacy text | `app/about`, `app/contact`, `app/terms`, `app/privacy` |
+| Main menu + footer page links | `nav` in `lib/site.ts` |
+| Customer reviews | `lib/reviews.ts` |
+| Page text (Our Story, Contact, Order Online, Pre-Order, Terms, Privacy) | `app/our-story`, `app/contact`, `app/order-online`, `app/pre-order`, `app/terms`, `app/privacy` |
 | Custom styles | `app/styles/site.css` (template styles are in `webflow.css`) |
 
 ## Project structure
@@ -28,7 +30,8 @@ app/                 pages (App Router)
   page.tsx           home
   menu/[slug]/       product pages
   blog/, blog/[slug] blog list + article pages
-  about/ contact/ terms/ privacy/
+  our-story/ collection/ reviews/ order-online/ pre-order/
+  contact/ terms/ privacy/
   not-found.tsx      404 page
 components/          shared UI (Navbar, Footer, colour switcher, forms…)
 lib/                 site settings and content
