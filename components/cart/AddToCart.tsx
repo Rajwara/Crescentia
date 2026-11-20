@@ -7,17 +7,20 @@ export default function AddToCart({
   id,
   label = "Add",
   size = "sm",
+  variant = "outline",
 }: {
   id: string;
   label?: string;
   size?: "sm" | "lg";
+  /** "pill" = solid dark button (menu cards) */
+  variant?: "outline" | "pill";
 }) {
   const { qtyOf, add, setQty } = useCart();
   const n = qtyOf(id);
 
   if (!n) {
     return (
-      <button type="button" className={`add-btn add-btn-${size}`} onClick={() => add(id)}>
+      <button type="button" className={`add-btn add-btn-${size} add-btn-${variant}`} onClick={() => add(id)}>
         <span className="add-btn-plus" aria-hidden>
           +
         </span>
@@ -26,7 +29,7 @@ export default function AddToCart({
     );
   }
   return (
-    <div className={`add-stepper add-btn-${size}`} role="group" aria-label="Quantity in cart">
+    <div className={`add-stepper add-btn-${size} add-btn-${variant}`} role="group" aria-label="Quantity in cart">
       <button type="button" onClick={() => setQty(id, n - 1)} aria-label="Remove one">
         −
       </button>

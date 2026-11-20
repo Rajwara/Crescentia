@@ -22,6 +22,8 @@ type CartContext = {
   open: () => void;
   close: () => void;
   toast: { id: number; text: string } | null;
+  /** Uploaded photo for an item (public/images/menu/<id>.*), if any. */
+  photoOf: (id: string) => string | undefined;
 };
 
 const Ctx = createContext<CartContext | null>(null);
@@ -33,7 +35,13 @@ export function useCart() {
 }
 
 /** Cart state shared by every page. Saved in the browser (localStorage) so it survives page loads. */
-export default function CartProvider({ children }: { children: React.ReactNode }) {
+export default function CartProvider({
+  children,
+  photos = {},
+}: {
+  children: React.ReactNode;
+  photos?: Record<string, string>;
+}) {
   const [qty, setQtyMap] = useState<Record<string, number>>({});
   const [loaded, setLoaded] = useState(false);
   const [isOpen, setOpen] = useState(false);
@@ -112,8 +120,9 @@ export default function CartProvider({ children }: { children: React.ReactNode }
       open: () => setOpen(true),
       close: () => setOpen(false),
       toast,
+      photoOf: (id) => photos[id.toLowerCase()],
     };
-  }, [qty, add, setQty, isOpen, toast]);
+  }, [qty, add, setQty, isOpen, toast, photos]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

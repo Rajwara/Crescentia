@@ -1,16 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { img } from "@/lib/images";
+import ItemImage from "../ItemImage";
 import { useCart } from "./CartProvider";
-
-const initials = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter((w) => /^[A-Za-z]/.test(w))
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("");
 
 /** Floating cart button (bottom-right), the slide-in cart panel and the "Added" toast. */
 export default function CartDrawer() {
@@ -96,7 +88,7 @@ export default function CartDrawer() {
               {lines.map(({ item, qty }) => (
                 <li key={item.id} className="cart-line">
                   <div className="cart-thumb">
-                    {item.image ? <img {...img(item.image)} sizes="64px" alt="" /> : <span>{initials(item.name)}</span>}
+                    <ItemImage item={item} sizes="64px" showLabel={false} />
                   </div>
                   <div className="cart-line-info">
                     <div className="cart-line-name">{item.name}</div>

@@ -41,6 +41,17 @@ public/fonts/        Taviraj (headings) + Poppins (body), self-hosted
 public/webflow/      Webflow animation runtime (scroll effects, sliders)
 ```
 
+## Menu photos
+
+Every menu item shows a "photo coming soon" placeholder until you add its photo:
+
+1. Find the item's `id` in `lib/menu.ts` (e.g. `id: "shakshuka"`).
+2. Save the photo as `public/images/menu/<id>.jpg` (or `.png` / `.webp`) — e.g. `public/images/menu/shakshuka.jpg`.
+   Square photos on a transparent or plain background look best (about 800 × 800 px).
+3. Commit/push. The photo appears on the menu card, popup, cart and checkout automatically.
+
+On GitHub you can upload straight into that folder: open `public/images/menu`, then **Add file → Upload files**.
+
 ## Colour switcher
 
 The round palette button (bottom-right) lets you try different colour schemes live.

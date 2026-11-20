@@ -7,6 +7,7 @@ import { products } from "@/lib/products";
 import { phoneHref, site } from "@/lib/site";
 import { useCart } from "./cart/CartProvider";
 import AddToCart from "./cart/AddToCart";
+import ItemImage from "./ItemImage";
 import { ButtonArrow } from "./Icons";
 
 type Mode = "order" | "preorder";
@@ -104,11 +105,9 @@ export default function OrderForm({ mode }: { mode: Mode }) {
           <div className="order-products">
             {lines.map(({ item, qty }) => (
               <div key={item.id} className="order-product is-selected">
-                {item.image ? (
-                  <img {...img(item.image)} sizes="88px" alt="" loading="lazy" />
-                ) : (
-                  <span className="order-product-mono">{item.name[0]}</span>
-                )}
+                <div className="order-product-media">
+                  <ItemImage item={item} sizes="88px" showLabel={false} />
+                </div>
                 <div className="order-product-info">
                   <div className="order-product-name">{item.name}</div>
                   <div className="page-meta">

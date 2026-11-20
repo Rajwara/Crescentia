@@ -5,6 +5,7 @@ import "./styles/site.css";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CartDrawer from "@/components/cart/CartDrawer";
 import CartProvider from "@/components/cart/CartProvider";
+import { getMenuPhotos } from "@/lib/menuPhotos";
 import { site } from "@/lib/site";
 import { themeInitScript } from "@/lib/themes";
 
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: wfModScript + themeInitScript }} />
       </head>
       <body className="body">
-        <CartProvider>
+        <CartProvider photos={getMenuPhotos()}>
           {children}
           <CartDrawer />
         </CartProvider>

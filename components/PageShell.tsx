@@ -10,6 +10,7 @@ export default function PageShell({
   title,
   lead,
   narrow,
+  wide,
   children,
 }: {
   current?: string;
@@ -17,13 +18,14 @@ export default function PageShell({
   title: string;
   lead?: React.ReactNode;
   narrow?: boolean;
+  wide?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <>
       <Navbar current={current} />
       <section className="page-section">
-        <div className={`page-container${narrow ? " narrow" : ""}`}>
+        <div className={`page-container${narrow ? " narrow" : ""}${wide ? " wide" : ""}`}>
           <header className="page-hero">
             <img {...img("gradient-404")} sizes="900px" alt="" className="page-hero-glow" />
             {eyebrow && <div className="page-eyebrow">{eyebrow}</div>}

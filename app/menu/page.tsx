@@ -12,9 +12,10 @@ export default function MenuPage() {
   return (
     <PageShell
       current="/menu"
+      wide
       eyebrow="Breakfast to Dinner"
       title="Our Menu"
-      lead="Everything we bake and cook, from the first croissant of the morning to dinner by the oven. Add dishes to your cart to order for today or pre-order for later."
+      lead="Everything we bake and cook, from the first croissant of the morning to dinner by the oven. Tap any item to see its ingredients, or add it straight to your cart."
     >
       <MenuBrowser />
     </PageShell>

@@ -1,21 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { img } from "@/lib/images";
-import { menu, TAG_LABELS } from "@/lib/menu";
+import { menu, TAG_LABELS, type MenuItem } from "@/lib/menu";
 import AddToCart from "./cart/AddToCart";
+import ItemImage from "./ItemImage";
+import MenuItemModal from "./MenuItemModal";
 
 const STICKY_TOP = 96; // where section tiles stick (below the category bar)
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
 /**
- * Full menu with:
- *  - a sticky category bar that follows the scroll (scroll-spy) with a sliding indicator
- *  - per-section "tiles" that stick beside the dishes, then fade/slide away as the next section arrives
- *  - dishes that rise into view in a staggered sequence
+ * Full menu:
+ *  - sticky category bar that follows the scroll (scroll-spy) with a sliding indicator
+ *  - per-section tiles that stick beside the cards, then fade/slide away as the next section arrives
+ *  - product cards that rise into view; clicking a card opens a popup with ingredients & details
  */
 export default function MenuBrowser() {
   const [active, setActive] = useState(menu[0].id);
+  const [selected, setSelected] = useState<MenuItem | null>(null);
+  const closeModal = useCallback(() => setSelected(null), []);
   const tabsRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
@@ -40,7 +44,7 @@ export default function MenuBrowser() {
         const h = tile.offsetHeight;
         // 0 → 1 once the end of this section starts pushing the sticky tile up and out of view
         const leave = clamp((STICKY_TOP + h - r.bottom) / (h * 0.6));
-        // 0 → 1 while the section travels through the viewport (for the image)
+        // 0 → 1 while the section travels through the viewport (rotates the image)
         const travel = clamp((vh - r.top) / (r.height + vh));
         // 1 → 0 as the section's top rises through the lower part of the screen
         const enter = clamp((r.top - vh * 0.7) / (vh * 0.3));
@@ -74,9 +78,9 @@ export default function MenuBrowser() {
     if (scroller) scroller.scrollTo({ left: btn.offsetLeft - scroller.clientWidth / 2 + btn.offsetWidth / 2, behavior: "smooth" });
   }, [active]);
 
-  // Reveal dishes as they enter the viewport.
+  // Reveal cards and tiles as they enter the viewport.
   useEffect(() => {
-    const els = document.querySelectorAll<HTMLElement>(".menu-dish, .menu-sec-tile");
+    const els = document.querySelectorAll<HTMLElement>(".menu-card, .menu-sec-tile");
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
@@ -85,10 +89,18 @@ export default function MenuBrowser() {
             io.unobserve(e.target);
           }
         }),
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 }
+      { rootMargin: "0px 0px -6% 0px", threshold: 0.08 }
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
+  }, []);
+
+  // Open a dish from a link like /menu#item=shakshuka
+  useEffect(() => {
+    const m = window.location.hash.match(/item=([\w-]+)/);
+    if (!m) return;
+    const item = menu.flatMap((s) => s.items).find((i) => i.id === m[1]);
+    if (item) setSelected(item);
   }, []);
 
   const goTo = (id: string) => {
@@ -145,45 +157,65 @@ export default function MenuBrowser() {
               <p className="menu-sec-intro">{s.intro}</p>
               <div className="menu-sec-art">
                 <img {...img("gradient-404")} sizes="400px" alt="" className="menu-sec-glow" />
-                <img {...img(s.image)} sizes="(max-width: 767px) 60vw, 360px" alt="" className="menu-sec-image" />
+                <img {...img(s.image)} sizes="(max-width: 767px) 40vw, 300px" alt="" className="menu-sec-image" />
               </div>
-              <div className="page-meta">{s.items.length} dishes</div>
+              <div className="page-meta">{s.items.length} items</div>
             </div>
           </div>
 
-          <div className="menu-sec-items">
-            {s.items.map((item, i) => (
-              <article key={item.id} className="menu-dish" style={{ "--i": i } as React.CSSProperties}>
-                {item.image && (
-                  <div className="menu-dish-thumb">
-                    <img {...img(item.image)} sizes="96px" alt="" loading="lazy" />
+          <div className="menu-cards">
+            {s.items.map((item, i) => {
+              const dark = item.tags?.includes("Signature");
+              return (
+                <article
+                  key={item.id}
+                  className={`menu-card${dark ? " is-dark" : ""}`}
+                  style={{ "--i": i % 6 } as React.CSSProperties}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${item.name}, AED ${item.price}. View details`}
+                  onClick={() => setSelected(item)}
+                  onKeyDown={(e) => {
+                    if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+                      e.preventDefault();
+                      setSelected(item);
+                    }
+                  }}
+                >
+                  {item.tags?.some((t) => t === "New" || t === "Signature") && (
+                    <span className="menu-card-badge">{item.tags.includes("New") ? "New" : "Signature"}</span>
+                  )}
+                  <span className="menu-card-info" aria-hidden>
+                    i
+                  </span>
+                  <div className="menu-card-media">
+                    <ItemImage item={item} sizes="(max-width: 479px) 40vw, 180px" className="menu-card-img" showLabel={false} />
                   </div>
-                )}
-                <div className="menu-dish-body">
-                  <div className="menu-dish-head">
-                    <h3 className="menu-dish-name">
-                      {item.product ? <a href={`/menu/${item.product}`}>{item.name}</a> : item.name}
-                    </h3>
-                    <span className="menu-dish-dots" aria-hidden />
-                    <span className="menu-dish-price">AED {item.price}</span>
+                  <h3 className="menu-card-name">{item.name}</h3>
+                  <div className="menu-card-meta">
+                    AED {item.price} <span aria-hidden>·</span> {item.portion}
                   </div>
-                  <p className="menu-dish-desc">{item.description}</p>
-                  <div className="menu-dish-foot">
-                    <div className="menu-dish-tags">
-                      {item.tags?.map((t) => (
-                        <span key={t} className={`menu-tag${t === "Signature" || t === "New" ? " is-strong" : ""}`} title={TAG_LABELS[t]}>
-                          {t === "Signature" || t === "New" ? t : TAG_LABELS[t]}
+                  <div className="menu-card-diet">
+                    {item.tags
+                      ?.filter((t) => t !== "New" && t !== "Signature")
+                      .map((t) => (
+                        <span key={t} title={TAG_LABELS[t]}>
+                          {t}
                         </span>
                       ))}
-                    </div>
-                    <AddToCart id={item.id} />
                   </div>
-                </div>
-              </article>
-            ))}
+                  {/* Stop clicks on the button from opening the popup */}
+                  <div className="menu-card-cta" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                    <AddToCart id={item.id} label="Add to Cart" variant="pill" />
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
       ))}
+
+      <MenuItemModal item={selected} onClose={closeModal} />
     </div>
   );
 }
